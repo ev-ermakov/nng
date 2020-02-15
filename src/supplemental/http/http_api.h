@@ -110,15 +110,17 @@ extern int nni_http_conn_setopt(
 // Note that the iovs of the aio's are clobbered by these methods -- callers
 // must not use them for any other purpose.
 
-extern int  nni_http_req_alloc(nni_http_req **, const nni_url *);
-extern int  nni_http_res_alloc(nni_http_res **);
-extern int  nni_http_res_alloc_error(nni_http_res **, uint16_t);
-extern void nni_http_req_free(nni_http_req *);
-extern void nni_http_res_free(nni_http_res *);
-extern void nni_http_write_req(nni_http_conn *, nni_http_req *, nni_aio *);
-extern void nni_http_write_res(nni_http_conn *, nni_http_res *, nni_aio *);
-extern void nni_http_read_req(nni_http_conn *, nni_http_req *, nni_aio *);
-extern void nni_http_read_res(nni_http_conn *, nni_http_res *, nni_aio *);
+extern int   nni_http_req_alloc(nni_http_req **, const nni_url *);
+extern int   nni_http_res_alloc(nni_http_res **);
+extern int   nni_http_res_alloc_error(nni_http_res **, uint16_t);
+extern void  nni_http_req_free(nni_http_req *);
+extern void  nni_http_res_free(nni_http_res *);
+extern void  nni_http_write_req(nni_http_conn *, nni_http_req *, nni_aio *);
+extern void  nni_http_write_res(nni_http_conn *, nni_http_res *, nni_aio *);
+extern void  nni_http_read_req(nni_http_conn *, nni_http_req *, nni_aio *);
+extern void  nni_http_read_res(nni_http_conn *, nni_http_res *, nni_aio *);
+extern void  nni_http_set_data(nni_http_conn *, void *);
+extern void *nni_http_get_data(nni_http_conn *);
 
 extern const char *nni_http_req_get_header(nni_http_req *, const char *);
 extern const char *nni_http_res_get_header(nni_http_res *, const char *);
@@ -242,6 +244,10 @@ extern int nni_http_server_res_error(nni_http_server *, nni_http_res *);
 // of the request structure.  (Some hijackers may keep the request for
 // further processing.)
 extern int nni_http_hijack(nni_http_conn *);
+
+// nng_http_server_set_on_conn XXX
+extern void nni_http_server_set_on_conn(
+    nni_http_server *, void (*)(nni_http_conn *, bool, void *), void *);
 
 // nni_http_handler_init creates a server handler object, for the supplied
 // URI (path only) with the callback.

@@ -505,6 +505,28 @@ nng_http_conn_read_res(nng_http_conn *conn, nng_http_res *res, nng_aio *aio)
 #endif
 }
 
+void
+nng_http_conn_set_data(nng_http_conn *conn, void *data)
+{
+#ifdef NNG_SUPP_HTTP
+	nni_http_set_data(conn, data);
+#else
+	NNI_ARG_UNUSED(conn);
+	NNI_ARG_UNUSED(data);
+#endif
+}
+
+void *
+nng_http_conn_get_data(nng_http_conn *conn)
+{
+#ifdef NNG_SUPP_HTTP
+	return nni_http_get_data(conn);
+#else
+	NNI_ARG_UNUSED(conn);
+	return (NULL);
+#endif
+}
+
 int
 nng_http_handler_alloc(
     nng_http_handler **hp, const char *uri, void (*cb)(nng_aio *))
@@ -825,6 +847,21 @@ nng_http_hijack(nng_http_conn *conn)
 	return (nni_http_hijack(conn));
 #else
 	NNI_ARG_UNUSED(conn);
+	return (NNG_ENOTSUP);
+#endif
+}
+
+int
+nng_http_server_set_on_conn(
+    nng_http_server *srv, void (*cb)(nng_http_conn *, bool, void *), void *arg)
+{
+#ifdef NNG_SUPP_HTTP
+	nni_http_server_set_on_conn(srv, cb, arg);
+	return (0);
+#else
+	NNI_ARG_UNUSED(srv);
+	NNI_ARG_UNUSED(cb);
+	NNI_ARG_UNUSED(arg);
 	return (NNG_ENOTSUP);
 #endif
 }

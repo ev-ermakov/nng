@@ -276,6 +276,12 @@ NNG_DECL void nng_http_conn_read_req(
 NNG_DECL void nng_http_conn_read_res(
     nng_http_conn *, nng_http_res *, nng_aio *);
 
+// nng_http_conn_set_data is used to store additional data.
+NNG_DECL void nng_http_conn_set_data(nng_http_conn *, void *);
+
+// nng_http_conn_get_data returns the data that was previously stored.
+NNG_DECL void *nng_http_conn_get_data(nng_http_conn *);
+
 // nng_http_req_reset resets the request to an initially allocated state.
 NNG_DECL void nng_http_req_reset(nng_http_req *);
 
@@ -486,6 +492,10 @@ NNG_DECL int nng_http_server_res_error(nng_http_server *, nng_http_res *);
 // further processing.)
 
 NNG_DECL int nng_http_hijack(nng_http_conn *);
+
+// nng_http_server_set_on_conn XXX
+NNG_DECL int nng_http_server_set_on_conn(
+    nng_http_server *, void (*)(nng_http_conn *, bool, void *), void *);
 
 // nng_http_client represents a "client" object.  Clients can be used
 // to create HTTP connections.  At present, connections are not cached

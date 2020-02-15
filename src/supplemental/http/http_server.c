@@ -87,6 +87,8 @@ struct nng_http_server {
 	char *               hostname;
 	nni_list             errors;
 	nni_mtx              errors_mtx;
+	void (*cb)(nni_http_conn *, bool, void *);
+	void                *arg;
 	nni_reap_item        reap;
 };
 
@@ -277,6 +279,7 @@ static void
 http_sconn_close_locked(http_sconn *sc)
 {
 	nni_http_conn *conn;
+	nni_http_server *s;
 
 	if (sc->closed) {
 		return;
@@ -290,6 +293,9 @@ http_sconn_close_locked(http_sconn *sc)
 	nni_aio_close(sc->cbaio);
 
 	if ((conn = sc->conn) != NULL) {
+		s = sc->server;
+		if (s->cb != NULL)
+			s->cb(conn, false, s->arg);
 		nni_http_conn_close(conn);
 	}
 	nni_reap(&sc->reap, http_sconn_reap, sc);
@@ -471,6 +477,16 @@ nni_http_hijack(nni_http_conn *conn)
 		nni_mtx_unlock(&s->mtx);
 	}
 	return (0);
+}
+
+void
+nni_http_server_set_on_conn(
+    nni_http_server *s, void (* cb)(nni_http_conn *, bool, void *), void *arg)
+{
+	nni_mtx_lock(&s->mtx);
+	s->cb = cb;
+	s->arg = arg;
+	nni_mtx_unlock(&s->mtx);
 }
 
 static void
@@ -817,6 +833,10 @@ http_server_acccb(void *arg)
 	nni_list_append(&s->conns, sc);
 
 	sc->handler = NULL;
+
+	if (s->cb != NULL)
+		s->cb(sc->conn, true, s->arg);
+
 	nni_http_read_req(sc->conn, sc->req, sc->rxaio);
 	nng_stream_listener_accept(s->listener, s->accaio);
 	nni_mtx_unlock(&s->mtx);
@@ -909,6 +929,9 @@ http_server_init(nni_http_server **serverp, const nni_url *url)
 	}
 
 	s->refcnt = 1;
+	s->cb = NULL;
+	s->arg = NULL;
+
 	*serverp  = s;
 	return (0);
 }

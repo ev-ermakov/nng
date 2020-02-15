@@ -65,6 +65,8 @@ struct nng_http_conn {
 	size_t   rd_get;
 	size_t   rd_put;
 	size_t   rd_bufsz;
+
+	void *data;
 };
 
 void
@@ -525,6 +527,18 @@ nni_http_read_res(nni_http_conn *conn, nni_http_res *res, nni_aio *aio)
 	nni_mtx_lock(&conn->mtx);
 	http_rd_submit(conn, aio);
 	nni_mtx_unlock(&conn->mtx);
+}
+
+void
+nni_http_set_data(nni_http_conn *conn, void *data)
+{
+	conn->data = data;
+}
+
+void *
+nni_http_get_data(nni_http_conn *conn)
+{
+	return (conn->data);
 }
 
 void
