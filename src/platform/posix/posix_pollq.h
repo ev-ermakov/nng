@@ -1,5 +1,5 @@
 //
-// Copyright 2019 Staysail Systems, Inc. <info@staysail.tech>
+// Copyright 2021 Staysail Systems, Inc. <info@staysail.tech>
 // Copyright 2018 Capitar IT Group BV <info@capitar.com>
 //
 // This software is supplied under the terms of the MIT License, a
@@ -11,7 +11,7 @@
 #ifndef PLATFORM_POSIX_POLLQ_H
 #define PLATFORM_POSIX_POLLQ_H
 
-#ifdef NNG_PLATFORM_POSIX
+#if defined(NNG_PLATFORM_POSIX) || defined(NNG_PLATFORM_FREERTOS)
 
 // This file defines structures we will use for emulating asynchronous I/O
 // on POSIX.  POSIX lacks the support for callback based asynchronous I/O
@@ -38,6 +38,6 @@ extern void nni_posix_pfd_set_cb(nni_posix_pfd *, nni_posix_pfd_cb, void *);
 #define NNI_POLL_ERR ((unsigned) POLLERR)
 #define NNI_POLL_INVAL ((unsigned) POLLNVAL)
 
-#endif // NNG_PLATFORM_POSIX
+#endif // NNG_PLATFORM_POSIX || NNG_PLATFORM_FREERTOS
 
 #endif // PLATFORM_POSIX_POLLQ_H

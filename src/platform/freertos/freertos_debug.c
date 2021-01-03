@@ -9,13 +9,10 @@
 
 #include "core/nng_impl.h"
 
-#ifdef NNG_PLATFORM_POSIX
+#ifdef NNG_PLATFORM_FREERTOS
 
-#include <errno.h>
-#include <stdarg.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
 
 void
 nni_plat_abort(void)
@@ -39,4 +36,4 @@ nni_plat_println(const char *message)
 	fputc('\n', stderr);
 }
 
-#endif // NNG_PLATFORM_POSIX
+#endif // NNG_PLATFORM_FREERTOS

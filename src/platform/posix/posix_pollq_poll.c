@@ -266,7 +266,13 @@ nni_posix_poll_thr(void *arg)
 		// (the condition with a potential pipeline stall) seems like
 		// adding complexity with no real benefit.  It also makes the
 		// worst case even worse.
-		(void) poll(fds, nfds, -1);
+
+		// TODO: freertos fix
+		int n = 0;
+		do {
+			nni_msleep(10);
+			n = poll(fds, nfds, 0);
+		} while (n == 0);
 
 		// If the waker pipe was signaled, read from it.
 		if (fds[0].revents & POLLIN) {

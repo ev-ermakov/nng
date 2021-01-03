@@ -1,5 +1,5 @@
 #
-# Copyright 2020 Staysail Systems, Inc. <info@staysail.tech>
+# Copyright 2021 Staysail Systems, Inc. <info@staysail.tech>
 #
 # This software is supplied under the terms of the MIT License, a
 # copy of which should be located in the distribution where this
@@ -19,6 +19,15 @@ endif ()
 
 # Global options.
 option(BUILD_SHARED_LIBS "Build shared library" ${BUILD_SHARED_LIBS})
+
+if (CMAKE_SYSTEM_NAME MATCHES "Generic")
+  set(NNG_PLAT_LIST "generic" "FreeRTOS")
+else ()
+  set(NNG_PLAT_LIST "generic")
+endif ()
+
+set(NNG_PLATFORM generic CACHE STRING "Target platform.")
+set_property(CACHE NNG_PLATFORM PROPERTY STRINGS ${NNG_PLAT_LIST})
 
 # We only build command line tools and tests if we are not in a
 # cross-compile situation.  Cross-compiling users who still want to

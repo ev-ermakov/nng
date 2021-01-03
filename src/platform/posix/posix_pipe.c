@@ -1,5 +1,5 @@
 //
-// Copyright 2020 Staysail Systems, Inc. <info@staysail.tech>
+// Copyright 2021 Staysail Systems, Inc. <info@staysail.tech>
 //
 // This software is supplied under the terms of the MIT License, a
 // copy of which should be located in the distribution where this
@@ -10,7 +10,7 @@
 // POSIX pipes.
 #include "core/nng_impl.h"
 
-#ifdef NNG_PLATFORM_POSIX
+#if defined(NNG_PLATFORM_POSIX) || defined(NNG_PLATFORM_FREERTOS)
 
 #include <errno.h>
 
@@ -132,4 +132,4 @@ nni_plat_pipe_close(int wfd, int rfd)
 
 #endif // NNG_USE_EVENTFD
 
-#endif // NNG_PLATFORM_POSIX
+#endif // NNG_PLATFORM_POSIX || NNG_PLATFORM_FREERTOS

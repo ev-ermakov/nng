@@ -25,11 +25,13 @@ static struct {
 	int (*listener_alloc)(nng_stream_listener **, const nng_url *);
 
 } stream_drivers[] = {
+#ifndef NNG_PLATFORM_FREERTOS
 	{
 	    .scheme         = "ipc",
 	    .dialer_alloc   = nni_ipc_dialer_alloc,
 	    .listener_alloc = nni_ipc_listener_alloc,
 	},
+#endif
 #ifdef NNG_PLATFORM_POSIX
 	{
 	    .scheme         = "unix",

@@ -1,5 +1,5 @@
 //
-// Copyright 2020 Staysail Systems, Inc. <info@staysail.tech>
+// Copyright 2021 Staysail Systems, Inc. <info@staysail.tech>
 // Copyright 2018 Capitar IT Group BV <info@capitar.com>
 //
 // This software is supplied under the terms of the MIT License, a
@@ -10,7 +10,7 @@
 
 #include "core/nng_impl.h"
 
-#ifdef NNG_PLATFORM_POSIX
+#if defined(NNG_PLATFORM_POSIX) || defined(NNG_PLATFORM_FREERTOS)
 
 #include <arpa/inet.h>
 #include <fcntl.h>
@@ -168,4 +168,4 @@ nni_posix_sockaddr2nn(nni_sockaddr *na, const void *sa, size_t sz)
 	return (0);
 }
 
-#endif // NNG_PLATFORM_POSIX
+#endif // NNG_PLATFORM_POSIX || NNG_PLATFORM_FREERTOS

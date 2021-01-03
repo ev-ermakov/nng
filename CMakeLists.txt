@@ -232,6 +232,10 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "QNX")
     add_definitions(-DNNG_PLATFORM_QNX)
     set(NNG_PLATFORM_POSIX ON)
 
+elseif (CMAKE_SYSTEM_NAME MATCHES "Generic" AND NNG_PLATFORM MATCHES "FreeRTOS")
+    add_definitions(-DNNG_PLATFORM_FREERTOS)
+    set(NNG_PLATFORM_FREERTOS ON)
+
 else ()
     message(AUTHOR_WARNING "WARNING: This platform may not be supported: ${CMAKE_SYSTEM_NAME}")
     message(AUTHOR_WARNING "${ISSUE_REPORT_MSG}")

@@ -1,5 +1,5 @@
 //
-// Copyright 2020 Staysail Systems, Inc. <info@staysail.tech>
+// Copyright 2021 Staysail Systems, Inc. <info@staysail.tech>
 // Copyright 2018 Capitar IT Group BV <info@capitar.com>
 // Copyright 2018 Devolutions <info@devolutions.net>
 //
@@ -537,6 +537,8 @@ extern const char *nni_plat_file_basename(const char *);
 #include "platform/posix/posix_impl.h"
 #elif defined(NNG_PLATFORM_WINDOWS)
 #include "platform/windows/win_impl.h"
+#elif defined(NNG_PLATFORM_FREERTOS)
+#include "platform/freertos/freertos_impl.h"
 #else
 #error "unknown platform"
 #endif
