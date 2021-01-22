@@ -1,0 +1,125 @@
+#
+# Copyright 2021 Staysail Systems, Inc. <info@staysail.tech>
+#
+# This software is supplied under the terms of the MIT License, a
+# copy of which should be located in the distribution where this
+# file was obtained (LICENSE.txt).  A copy of the license may also be
+# found online at https://opensource.org/licenses/MIT.
+#
+
+# NNG Options.  These are user configurable knobs.
+
+# Global options.
+
+option('nng_tests',
+  type: 'boolean',
+  value: true,
+  description: 'Build and run tests'
+)
+
+option('nng_tools',
+  type: 'boolean',
+  value: true,
+  description: 'Build extra tools'
+)
+
+option('nng_cat',
+  type: 'boolean',
+  value: true,
+  description: 'Build Enable building nngcat utility'
+)
+
+option('nng_demo',
+  type: 'boolean',
+  value: false,
+  description: 'Build demo projects'
+)
+
+option('nng_compat',
+  type: 'boolean',
+  value: true,
+  description: 'Enable nanomsg compatibility layer'
+)
+
+option('nng_elide_deprecated',
+  type: 'boolean',
+  value: false,
+  description: 'Elide deprecated functionality'
+)
+
+option('nng_stats',
+  type: 'boolean',
+  value: true,
+  description: 'Enable statistics'
+)
+
+option('nng_resolv_concurrency',
+  type: 'boolean',
+  value: true,
+  description: 'Resolver threads'
+)
+
+#
+# Protocols.
+#
+
+option('nng_proto',
+  type: 'array',
+  choices: [
+    'bus0',
+    'pair0', 'pair1',
+    'push0', 'pull0',
+    'pub0', 'sub0',
+    'req0', 'rep0',
+    'respondent0', 'surveyor0'
+  ],
+  value: [
+    'bus0',
+    'pair0', 'pair1',
+    'push0', 'pull0',
+    'pub0', 'sub0',
+    'req0', 'rep0',
+    'respondent0', 'surveyor0'
+  ],
+  description: 'List of protocols to build'
+)
+
+#
+# Transport options.
+#
+
+option('nng_transport',
+  type: 'array',
+  choices: [
+    'inproc', 'ipc', 'tcp', 'tls', 'ws', 'wss', 'zerotier'
+  ],
+  value: [
+    'inproc', 'ipc', 'tcp', 'tls', 'ws', 'wss'
+  ],
+  description: 'List of transports to build'
+)
+
+# HTTP API support.
+option('nng_http',
+  type: 'boolean',
+  value: true,
+  description: 'Enable HTTP API'
+)
+
+# TLS support.
+
+# Enabling TLS is required to enable support for the TLS transport
+# and WSS.  It does require a 3rd party TLS engine to be selected.
+option('nng_tls',
+  type: 'boolean',
+  value: false,
+  description: 'Enable TLS support'
+)
+
+option('nng_tls_engine',
+  type: 'combo',
+  choices: [ 'none', 'mbed', 'wolf' ],
+  # We assume Mbed for now.  (Someday replaced perhaps with Bear.)
+  value: 'mbed',
+  description: 'TLS engine to use'
+)
