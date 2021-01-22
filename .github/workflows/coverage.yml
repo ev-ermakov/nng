@@ -4,7 +4,7 @@ jobs:
 
   linux-coverage:
     name: linux
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ ubuntu-20.04 ]
     steps:
     - name: Check out code
       uses: actions/checkout@v1
@@ -12,17 +12,17 @@ jobs:
     - name: Install mbedTLS
       run: sudo apt-get install libmbedtls-dev
 
-    - name: Install ninja
-      run: sudo apt-get install ninja-build
+    - name: Install meson
+      run: sudo apt-get install meson
 
     - name: Configure
-      run:  mkdir build && cd build && cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DNNG_ENABLE_COVERAGE=ON -DNNG_ENABLE_TLS=ON ..
+      run: meson build --buildtype debug -Db_coverage=true -Dnng_tls=true
 
     - name: build
       run: cd build && ninja
 
     - name: Test
-      run: cd build && ctest --output-on-failure
+      run: cd build && meson test --print-errorlogs
 
     - name: Upload report
       uses: codecov/codecov-action@v1
@@ -40,20 +40,20 @@ jobs:
       - name: Install mbedTLS
         run: brew install mbedtls
 
-      - name: Install ninja
-        run: brew install ninja
+      - name: Install meson
+        run: brew install meson
 
       - name: Install lcov
         run: brew install lcov
 
       - name: Configure
-        run:  mkdir build && cd build && cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DNNG_ENABLE_COVERAGE=ON -DNNG_ENABLE_TLS=ON ..
+        run:  meson build --buildtype debug -Db_coverage=true -Dnng_tls=true
 
       - name: build
-        run: cd build && ninja
+        run: meson compile -C build
 
       - name: Test
-        run: cd build && ctest --output-on-failure
+        run: meson test -C build --print-errorlogs
 
       - name: Preprocess
         run: cd build && lcov -c -d . -o lcov.info

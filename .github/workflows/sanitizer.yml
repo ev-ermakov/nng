@@ -10,26 +10,21 @@ jobs:
     strategy:
       matrix:
         sanitizer: [ address, undefined, thread ]
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-20.04 ]
 
     steps:
       - uses: actions/checkout@v1
 
       - uses: mstksg/get-package@v1
         with:
-            apt-get: ninja-build libmbedtls-dev
+            apt-get: meson libmbedtls-dev
             brew: ninja mbedtls
 
       - name: Configure
-        run: |
-          mkdir build
-          cd build
-          cmake -G Ninja -DNNG_SANITIZER=${{ matrix.sanitizer }} -DCMAKE_BUILD_TYPE=Debug -DNNG_ENABLE_TLS=ON -DNNG_TOOLS=OFF ..
+        run: meson build -Dbuildtype=debug -Db_sanitize=${{ matrix.sanitizer }} -Dnng_tls=true -Dnng_tools=false
+
       - name: Build
-        run: |
-          cd build
-          ninja
+        run: cd build && ninja
+
       - name: Test
-        run: |
-          cd build
-          ninja test
+        run: cd build && meson test --print-errorlogs

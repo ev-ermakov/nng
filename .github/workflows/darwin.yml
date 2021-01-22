@@ -9,14 +9,14 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v1
 
-    - name: Install ninja
-      run: brew install ninja
+    - name: Install meson
+      run: brew install meson
 
     - name: Configure
-      run: mkdir build && cd build && cmake -G Ninja ..
+      run: meson build
 
     - name: build
-      run: cd build && ninja
+      run: meson compile -C build
 
     - name: Test
-      run: cd build && ctest --output-on-failure
+      run: meson test -C build --print-errorlogs
